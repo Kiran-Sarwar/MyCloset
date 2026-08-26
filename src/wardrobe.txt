@@ -1,2 +1,6 @@
-pants,pants,formal,re,summers
-dress,kjh,sf,ksjdhf,sjhf
+Black T-Shirt,Tops,T-Shirt,Casual,Black,Summer
+Short,Bottoms,Shorts,Casual,,Summer
+Blue Jeans,Bottoms,Jeans,Casual,Blue,All Season
+Black T shirt,Tops,T-Shirt,Casual,pink,All Season
+Black T shirt,Tops,T-Shirt,Casual,pink,All Season
+Black T shirt,One-Piece,Dress,Casual,pink,Autumn

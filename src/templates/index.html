@@ -1,31 +1,678 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MyCloset</title>
-</head>
+{% extends "base.html" %}
 
-<body>
+{% block title %}My Wardrobe - MyCloset{% endblock %}
+
+{% block content %}
+
+<section class="hero">
+
     <h1>Welcome to MyCloset!</h1>
 
-    <p>Your digital wardrobe.</p>
+    <p class="subtitle">
+        Your digital wardrobe, organized your way.
+    </p>
 
-    <h2>My Wardrobe</h2>
+</section>
 
-    {% if wardrobe %}
-        {% for item in wardrobe %}
-            <div>
-                <h3>{{ item.name }}</h3>
-                <p>Category: {{ item.category }}</p>
-                <p>Occasion: {{ item.occasion }}</p>
-                <p>Color: {{ item.color }}</p>
-                <p>Season: {{ item.season }}</p>
+
+<section class="dashboard">
+
+    <div class="stat-card">
+
+        <span class="stat-number">
+            {{ total_items }}
+        </span>
+
+        <span class="stat-label">
+            Total Items
+        </span>
+
+    </div>
+
+
+    <div class="stat-card">
+
+        <span class="stat-number">
+            {{ tops_count }}
+        </span>
+
+        <span class="stat-label">
+            Tops
+        </span>
+
+    </div>
+
+
+    <div class="stat-card">
+
+        <span class="stat-number">
+            {{ bottoms_count }}
+        </span>
+
+        <span class="stat-label">
+            Bottoms
+        </span>
+
+    </div>
+
+</section>
+
+
+<section class="filter-section">
+
+    <div class="section-heading">
+
+        <h2>My Wardrobe</h2>
+
+        <p>
+            Find exactly what you're looking for.
+        </p>
+
+    </div>
+
+
+    <form
+        action="/search"
+        method="GET"
+        class="search-form"
+    >
+
+        <div class="filter-grid">
+
+
+            <div class="filter-group">
+
+                <label for="category">
+                    Category
+                </label>
+
+                <select
+                    id="category"
+                    name="category"
+                >
+
+                    <option value="">
+                        All Categories
+                    </option>
+
+                    <option
+                        value="Tops"
+                        {% if search_category == "Tops" %}
+                            selected
+                        {% endif %}
+                    >
+                        Tops
+                    </option>
+
+                    <option
+                        value="Bottoms"
+                        {% if search_category == "Bottoms" %}
+                            selected
+                        {% endif %}
+                    >
+                        Bottoms
+                    </option>
+
+                    <option
+                        value="One-Piece"
+                        {% if search_category == "One-Piece" %}
+                            selected
+                        {% endif %}
+                    >
+                        One-Piece
+                    </option>
+
+                    <option
+                        value="Outerwear"
+                        {% if search_category == "Outerwear" %}
+                            selected
+                        {% endif %}
+                    >
+                        Outerwear
+                    </option>
+
+                    <option
+                        value="Shoes"
+                        {% if search_category == "Shoes" %}
+                            selected
+                        {% endif %}
+                    >
+                        Shoes
+                    </option>
+
+                    <option
+                        value="Accessories"
+                        {% if search_category == "Accessories" %}
+                            selected
+                        {% endif %}
+                    >
+                        Accessories
+                    </option>
+
+                </select>
+
             </div>
-            <hr>
+
+
+            <div class="filter-group">
+
+                <label for="item_type">
+                    Type
+                </label>
+
+                <select
+                    id="item_type"
+                    name="item_type"
+                >
+
+                    <option value="">
+                        All Types
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="filter-group">
+
+                <label for="occasion">
+                    Occasion
+                </label>
+
+                <select
+                    id="occasion"
+                    name="occasion"
+                >
+
+                    <option value="">
+                        All Occasions
+                    </option>
+
+                    <option
+                        value="Casual"
+                        {% if search_occasion == "Casual" %}
+                            selected
+                        {% endif %}
+                    >
+                        Casual
+                    </option>
+
+                    <option
+                        value="Formal"
+                        {% if search_occasion == "Formal" %}
+                            selected
+                        {% endif %}
+                    >
+                        Formal
+                    </option>
+
+                    <option
+                        value="Party"
+                        {% if search_occasion == "Party" %}
+                            selected
+                        {% endif %}
+                    >
+                        Party
+                    </option>
+
+                    <option
+                        value="Sports"
+                        {% if search_occasion == "Sports" %}
+                            selected
+                        {% endif %}
+                    >
+                        Sports
+                    </option>
+
+                    <option
+                        value="Work"
+                        {% if search_occasion == "Work" %}
+                            selected
+                        {% endif %}
+                    >
+                        Work
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="filter-group">
+
+                <label for="color">
+                    Color
+                </label>
+
+                <select
+                    id="color"
+                    name="color"
+                >
+
+                    <option value="">
+                        All Colors
+                    </option>
+
+                    <option
+                        value="Black"
+                        {% if search_color == "Black" %}
+                            selected
+                        {% endif %}
+                    >
+                        Black
+                    </option>
+
+                    <option
+                        value="White"
+                        {% if search_color == "White" %}
+                            selected
+                        {% endif %}
+                    >
+                        White
+                    </option>
+
+                    <option
+                        value="Blue"
+                        {% if search_color == "Blue" %}
+                            selected
+                        {% endif %}
+                    >
+                        Blue
+                    </option>
+
+                    <option
+                        value="Red"
+                        {% if search_color == "Red" %}
+                            selected
+                        {% endif %}
+                    >
+                        Red
+                    </option>
+
+                    <option
+                        value="Green"
+                        {% if search_color == "Green" %}
+                            selected
+                        {% endif %}
+                    >
+                        Green
+                    </option>
+
+                    <option
+                        value="Yellow"
+                        {% if search_color == "Yellow" %}
+                            selected
+                        {% endif %}
+                    >
+                        Yellow
+                    </option>
+
+                    <option
+                        value="Pink"
+                        {% if search_color == "Pink" %}
+                            selected
+                        {% endif %}
+                    >
+                        Pink
+                    </option>
+
+                    <option
+                        value="Brown"
+                        {% if search_color == "Brown" %}
+                            selected
+                        {% endif %}
+                    >
+                        Brown
+                    </option>
+
+                    <option
+                        value="Grey"
+                        {% if search_color == "Grey" %}
+                            selected
+                        {% endif %}
+                    >
+                        Grey
+                    </option>
+
+                    <option
+                        value="Beige"
+                        {% if search_color == "Beige" %}
+                            selected
+                        {% endif %}
+                    >
+                        Beige
+                    </option>
+
+                    <option
+                        value="Purple"
+                        {% if search_color == "Purple" %}
+                            selected
+                        {% endif %}
+                    >
+                        Purple
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="filter-group">
+
+                <label for="season">
+                    Season
+                </label>
+
+                <select
+                    id="season"
+                    name="season"
+                >
+
+                    <option value="">
+                        All Seasons
+                    </option>
+
+                    <option
+                        value="Spring"
+                        {% if search_season == "Spring" %}
+                            selected
+                        {% endif %}
+                    >
+                        Spring
+                    </option>
+
+                    <option
+                        value="Summer"
+                        {% if search_season == "Summer" %}
+                            selected
+                        {% endif %}
+                    >
+                        Summer
+                    </option>
+
+                    <option
+                        value="Autumn"
+                        {% if search_season == "Autumn" %}
+                            selected
+                        {% endif %}
+                    >
+                        Autumn
+                    </option>
+
+                    <option
+                        value="Winter"
+                        {% if search_season == "Winter" %}
+                            selected
+                        {% endif %}
+                    >
+                        Winter
+                    </option>
+
+                    <option
+                        value="All Season"
+                        {% if search_season == "All Season" %}
+                            selected
+                        {% endif %}
+                    >
+                        All Season
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+
+        <div class="filter-actions">
+
+            <button
+                type="submit"
+                class="filter-button"
+            >
+                Apply Filters
+            </button>
+
+
+            <a
+                href="/"
+                class="clear-button"
+            >
+                Clear Filters
+            </a>
+
+        </div>
+
+    </form>
+
+</section>
+
+
+{% if wardrobe %}
+
+    <div class="results-header">
+
+        <h2>Wardrobe Items</h2>
+
+        <span class="result-count">
+            {{ wardrobe|length }} item(s)
+        </span>
+
+    </div>
+
+
+    <div class="wardrobe">
+
+        {% for item in wardrobe %}
+
+            <div class="item-card">
+
+                <div class="item-card-header">
+
+                    <div>
+
+                        <h3>
+                            {{ item.name }}
+                        </h3>
+
+                        <span class="category-badge">
+                            {{ item.category }}
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="item-details">
+
+                    <p>
+                        <strong>Type</strong>
+                        <span>{{ item.item_type }}</span>
+                    </p>
+
+                    <p>
+                        <strong>Occasion</strong>
+                        <span>{{ item.occasion }}</span>
+                    </p>
+
+                    <p>
+                        <strong>Color</strong>
+                        <span>{{ item.color }}</span>
+                    </p>
+
+                    <p>
+                        <strong>Season</strong>
+                        <span>{{ item.season }}</span>
+                    </p>
+
+                </div>
+
+
+                <form
+                    action="/remove/{{ item.name }}"
+                    method="POST"
+                >
+
+                    <button
+                        type="submit"
+                        class="remove-button"
+                    >
+                        Remove
+                    </button>
+
+                </form>
+
+            </div>
+
         {% endfor %}
-    {% else %}
-        <p>Your wardrobe is empty.</p>
-    {% endif %}
-</body>
-</html>
+
+    </div>
+
+{% else %}
+
+    <div class="empty-message">
+
+        <h3>No clothing items found</h3>
+
+        <p>
+            Try changing your filters or add a new item.
+        </p>
+
+        <a
+            href="/add"
+            class="add-button"
+        >
+            Add Clothing Item
+        </a>
+
+    </div>
+
+{% endif %}
+
+
+<script>
+
+    const categorySelect =
+        document.getElementById("category");
+
+    const typeSelect =
+        document.getElementById("item_type");
+
+
+    const categoryTypes = {
+
+        "Tops": [
+            "T-Shirt",
+            "Shirt",
+            "Blouse",
+            "Sweater",
+            "Hoodie"
+        ],
+
+        "Bottoms": [
+            "Jeans",
+            "Trousers",
+            "Shorts",
+            "Skirt"
+        ],
+
+        "One-Piece": [
+            "Dress",
+            "Jumpsuit"
+        ],
+
+        "Outerwear": [
+            "Jacket",
+            "Coat",
+            "Blazer"
+        ],
+
+        "Shoes": [
+            "Sneakers",
+            "Boots",
+            "Sandals",
+            "Formal Shoes"
+        ],
+
+        "Accessories": [
+            "Bag",
+            "Scarf",
+            "Hat",
+            "Belt",
+            "Jewelry"
+        ]
+
+    };
+
+
+    function updateTypes() {
+
+        const selectedCategory =
+            categorySelect.value;
+
+        typeSelect.innerHTML = "";
+
+
+        const defaultOption =
+            document.createElement("option");
+
+        defaultOption.value = "";
+
+        defaultOption.textContent =
+            "All Types";
+
+        typeSelect.appendChild(defaultOption);
+
+
+        if (selectedCategory === "") {
+
+            typeSelect.disabled = true;
+
+            return;
+        }
+
+
+        typeSelect.disabled = false;
+
+
+        categoryTypes[selectedCategory].forEach(
+            function(type) {
+
+                const option =
+                    document.createElement("option");
+
+                option.value = type;
+
+                option.textContent = type;
+
+
+                if (
+                    type === "{{ search_type }}"
+                ) {
+
+                    option.selected = true;
+
+                }
+
+
+                typeSelect.appendChild(option);
+
+            }
+        );
+
+    }
+
+
+    categorySelect.addEventListener(
+        "change",
+        updateTypes
+    );
+
+
+    updateTypes();
+
+</script>
+
+{% endblock %}

@@ -1,10 +1,14 @@
 from clothing_item import ClothingItem
+
 from pathlib import Path
+
 
 class WardrobeManager:
 
     def __init__(self) -> None:
+
         self.wardrobe: list[ClothingItem] = []
+
         self.file_path = Path(__file__).parent / "wardrobe.txt"
 
     def add_clothing(
@@ -13,7 +17,8 @@ class WardrobeManager:
         category: str,
         occasion: str,
         color: str,
-        season: str
+        season: str,
+        item_type: str = ""
     ) -> None:
 
         clothing_item = ClothingItem(
@@ -21,7 +26,8 @@ class WardrobeManager:
             category,
             occasion,
             color,
-            season
+            season,
+            item_type
         )
 
         self.wardrobe.append(clothing_item)
@@ -31,50 +37,38 @@ class WardrobeManager:
     def view_wardrobe(self) -> None:
 
         if not self.wardrobe:
+
             print("Your wardrobe is empty.")
+
         else:
+
             print("\n--- Your Wardrobe ---")
 
             for item in self.wardrobe:
+
                 item.display()
 
-    def search_by_category(self, category: str) -> list[ClothingItem]:
+    def search_by_category(
+        self,
+        category: str
+    ) -> list[ClothingItem]:
 
-        found_items = [
+        return [
             item
             for item in self.wardrobe
             if item.category.lower() == category.lower()
         ]
 
-        if not found_items:
-            print(f"No items found in category: {category}")
-            return []
+    def search_by_occasion(
+        self,
+        occasion: str
+    ) -> list[ClothingItem]:
 
-        print(f"\n--- Items in Category: {category} ---")
-
-        for item in found_items:
-            item.display()
-
-        return found_items
-
-    def search_by_occasion(self, occasion: str) -> list[ClothingItem]:
-
-        found_items = [
+        return [
             item
             for item in self.wardrobe
             if item.occasion.lower() == occasion.lower()
         ]
-
-        if not found_items:
-            print(f"No items found for occasion: {occasion}")
-            return []
-
-        print(f"\n--- Items for Occasion: {occasion} ---")
-
-        for item in found_items:
-            item.display()
-
-        return found_items
 
     def remove_clothing(self, name: str) -> None:
 
@@ -84,7 +78,9 @@ class WardrobeManager:
 
                 self.wardrobe.remove(item)
 
-                print(f"{name} has been removed from your wardrobe.")
+                print(
+                    f"{name} has been removed from your wardrobe."
+                )
 
                 return
 
@@ -94,7 +90,17 @@ class WardrobeManager:
 
         count = len(self.wardrobe)
 
-        print(f"You have {count} item(s) in your wardrobe.")
+        print(
+            f"You have {count} item(s) in your wardrobe."
+        )
+
+    def get_category_count(self, category: str) -> int:
+
+        return sum(
+            1
+            for item in self.wardrobe
+            if item.category.lower() == category.lower()
+        )
 
     def save_wardrobe(self) -> None:
 
@@ -103,15 +109,14 @@ class WardrobeManager:
             for item in self.wardrobe:
 
                 file.write(
-                    f"{item.name},{item.category},{item.occasion},"
-                    f"{item.color},{item.season}\n"
+                    f"{item.name},{item.category},{item.item_type},"
+                    f"{item.occasion},{item.color},{item.season}\n"
                 )
 
         print("Wardrobe saved to wardrobe.txt.")
 
     def load_wardrobe(self) -> None:
 
-        # Clear current wardrobe before loading saved items.
         self.wardrobe.clear()
 
         try:
@@ -120,21 +125,37 @@ class WardrobeManager:
 
                 for line in file:
 
-                    if line.strip():
+                    if not line.strip():
+                        continue
 
-                        name, category, occasion, color, season = (
-                            line.strip().split(",")
+                    parts = line.strip().split(",")
+
+                    if len(parts) == 6:
+
+                        name, category, item_type, occasion, color, season = (
+                            parts
                         )
 
-                        item = ClothingItem(
-                            name,
-                            category,
-                            occasion,
-                            color,
-                            season
-                        )
+                    elif len(parts) == 5:
 
-                        self.wardrobe.append(item)
+                        name, category, occasion, color, season = parts
+
+                        item_type = ""
+
+                    else:
+
+                        continue
+
+                    item = ClothingItem(
+                        name,
+                        category,
+                        occasion,
+                        color,
+                        season,
+                        item_type
+                    )
+
+                    self.wardrobe.append(item)
 
             print("Wardrobe loaded from wardrobe.txt.")
 
