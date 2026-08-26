@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyCloset</title>
+</head>
+
+<body>
+    <h1>Welcome to MyCloset!</h1>
+
+    <p>Your digital wardrobe.</p>
+
+    <h2>My Wardrobe</h2>
+
+    {% if wardrobe %}
+        {% for item in wardrobe %}
+            <div>
+                <h3>{{ item.name }}</h3>
+                <p>Category: {{ item.category }}</p>
+                <p>Occasion: {{ item.occasion }}</p>
+                <p>Color: {{ item.color }}</p>
+                <p>Season: {{ item.season }}</p>
+            </div>
+            <hr>
+        {% endfor %}
+    {% else %}
+        <p>Your wardrobe is empty.</p>
+    {% endif %}
+</body>
+</html>

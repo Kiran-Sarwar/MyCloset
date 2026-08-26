@@ -1,10 +1,11 @@
 from clothing_item import ClothingItem
-
+from pathlib import Path
 
 class WardrobeManager:
 
     def __init__(self) -> None:
         self.wardrobe: list[ClothingItem] = []
+        self.file_path = Path(__file__).parent / "wardrobe.txt"
 
     def add_clothing(
         self,
@@ -97,7 +98,7 @@ class WardrobeManager:
 
     def save_wardrobe(self) -> None:
 
-        with open("wardrobe.txt", "w") as file:
+        with open(self.file_path, "w") as file:
 
             for item in self.wardrobe:
 
@@ -115,7 +116,7 @@ class WardrobeManager:
 
         try:
 
-            with open("wardrobe.txt", "r") as file:
+            with open(self.file_path, "r") as file:
 
                 for line in file:
 
