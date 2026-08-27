@@ -20,7 +20,7 @@ class TestWardrobeManager(unittest.TestCase):
 
         manager.add_clothing(
             "Black T-shirt",
-            "Top",
+            "Tops",
             "Casual",
             "Black",
             "Summer"
@@ -34,7 +34,7 @@ class TestWardrobeManager(unittest.TestCase):
 
         manager.add_clothing(
             "Black T-shirt",
-            "Top",
+            "Tops",
             "Casual",
             "Black",
             "Summer"
@@ -42,13 +42,13 @@ class TestWardrobeManager(unittest.TestCase):
 
         manager.add_clothing(
             "Blue Jeans",
-            "Bottom",
+            "Bottoms",
             "Casual",
             "Blue",
             "All-Season"
         )
 
-        results = manager.search_by_category("Top")
+        results = manager.search_by_category("Tops")
 
         self.assertEqual(len(results), 1)
         self.assertEqual(results[0].name, "Black T-shirt")
@@ -66,7 +66,7 @@ class TestWardrobeManager(unittest.TestCase):
 
         manager.add_clothing(
             "Black T-shirt",
-            "Top",
+            "Tops",
             "Casual",
             "Black",
             "Summer"
@@ -77,12 +77,71 @@ class TestWardrobeManager(unittest.TestCase):
         self.assertEqual(len(results), 1)
         self.assertEqual(results[0].name, "Navy Suit")
 
+    def test_search_keyword(self):
+        manager = WardrobeManager()
+
+        manager.add_clothing(
+            "Black T-shirt",
+            "Tops",
+            "Casual",
+            "Black",
+            "Summer",
+            "T-Shirt"
+        )
+
+        manager.add_clothing(
+            "Blue Jeans",
+            "Bottoms",
+            "Casual",
+            "Blue",
+            "All-Season",
+            "Jeans"
+        )
+
+        results = manager.search("black")
+
+        self.assertEqual(len(results), 1)
+        self.assertEqual(results[0].name, "Black T-shirt")
+
+    def test_search_keyword_case_insensitive(self):
+        manager = WardrobeManager()
+
+        manager.add_clothing(
+            "Black T-shirt",
+            "Tops",
+            "Casual",
+            "Black",
+            "Summer",
+            "T-Shirt"
+        )
+
+        results = manager.search("BLACK")
+
+        self.assertEqual(len(results), 1)
+        self.assertEqual(results[0].name, "Black T-shirt")
+
+    def test_search_keyword_not_found(self):
+        manager = WardrobeManager()
+
+        manager.add_clothing(
+            "Black T-shirt",
+            "Tops",
+            "Casual",
+            "Black",
+            "Summer",
+            "T-Shirt"
+        )
+
+        results = manager.search("Wedding")
+
+        self.assertEqual(results, [])
+
     def test_remove_clothing(self):
         manager = WardrobeManager()
 
         manager.add_clothing(
             "Black T-shirt",
-            "Top",
+            "Tops",
             "Casual",
             "Black",
             "Summer"
@@ -90,7 +149,7 @@ class TestWardrobeManager(unittest.TestCase):
 
         manager.add_clothing(
             "Blue Jeans",
-            "Bottom",
+            "Bottoms",
             "Casual",
             "Blue",
             "All-Season"
@@ -108,7 +167,7 @@ class TestWardrobeManager(unittest.TestCase):
 
         manager.add_clothing(
             "Black T-shirt",
-            "Top",
+            "Tops",
             "Casual",
             "Black",
             "Summer"
@@ -116,7 +175,7 @@ class TestWardrobeManager(unittest.TestCase):
 
         manager.add_clothing(
             "Blue Jeans",
-            "Bottom",
+            "Bottoms",
             "Casual",
             "Blue",
             "All-Season"
@@ -133,7 +192,7 @@ class TestWardrobeManager(unittest.TestCase):
 
         manager.add_clothing(
             "Black T-shirt",
-            "Top",
+            "Tops",
             "Casual",
             "Black",
             "Summer"
@@ -148,7 +207,7 @@ class TestWardrobeManager(unittest.TestCase):
 
         manager.add_clothing(
             "Black T-shirt",
-            "Top",
+            "Tops",
             "Casual",
             "Black",
             "Summer"
@@ -159,8 +218,6 @@ class TestWardrobeManager(unittest.TestCase):
         self.assertEqual(results, [])
 
     def test_save_and_load_wardrobe(self):
-        # Create a temporary folder so the real wardrobe.txt
-        # in the project is not affected by the test.
         original_directory = os.getcwd()
         temporary_directory = tempfile.mkdtemp()
 
@@ -171,7 +228,7 @@ class TestWardrobeManager(unittest.TestCase):
 
             manager.add_clothing(
                 "Black T-shirt",
-                "Top",
+                "Tops",
                 "Casual",
                 "Black",
                 "Summer"
@@ -179,7 +236,7 @@ class TestWardrobeManager(unittest.TestCase):
 
             manager.add_clothing(
                 "Blue Jeans",
-                "Bottom",
+                "Bottoms",
                 "Casual",
                 "Blue",
                 "All-Season"
@@ -187,15 +244,16 @@ class TestWardrobeManager(unittest.TestCase):
 
             manager.save_wardrobe()
 
-            # Create a new manager to simulate restarting MyCloset.
             new_manager = WardrobeManager()
             new_manager.load_wardrobe()
 
             self.assertEqual(len(new_manager.wardrobe), 2)
+
             self.assertEqual(
                 new_manager.wardrobe[0].name,
                 "Black T-shirt"
             )
+
             self.assertEqual(
                 new_manager.wardrobe[1].name,
                 "Blue Jeans"

@@ -1,5 +1,4 @@
 from clothing_item import ClothingItem
-
 from pathlib import Path
 
 
@@ -68,6 +67,26 @@ class WardrobeManager:
             item
             for item in self.wardrobe
             if item.occasion.lower() == occasion.lower()
+        ]
+
+    def search(
+        self,
+        keyword: str
+    ) -> list[ClothingItem]:
+
+        keyword = keyword.lower()
+
+        return [
+            item
+            for item in self.wardrobe
+            if (
+                keyword in item.name.lower()
+                or keyword in item.category.lower()
+                or keyword in item.item_type.lower()
+                or keyword in item.occasion.lower()
+                or keyword in item.color.lower()
+                or keyword in item.season.lower()
+            )
         ]
 
     def remove_clothing(self, name: str) -> None:
