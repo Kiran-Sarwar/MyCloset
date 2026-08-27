@@ -431,25 +431,30 @@ input:focus {
 
 .empty-message {
     text-align: center;
-
     background: #ffffff;
-
     border: 1px solid #e5e1dc;
-
-    border-radius: 14px;
-
-    padding: 50px 20px;
-
+    border-radius: 16px;
+    padding: 60px 25px;
+    margin: 20px 0;
     color: #777777;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
 }
-
 
 .empty-message h3 {
     color: #333333;
-
-    margin-bottom: 8px;
+    margin-bottom: 12px;
+    font-size: 24px;
 }
 
+.empty-message p {
+    margin-bottom: 24px;
+    font-size: 16px;
+}
+
+.empty-message .add-button {
+    display: inline-block;
+    text-decoration: none;
+}
 
 .form-container {
     max-width: 650px;
