@@ -128,15 +128,25 @@ def search():
         search_season=season,
         **dashboard_data
     )
+@app.route("/outfits")
+def outfits():
+    occasion = request.args.get("occasion", "").strip()
+    season = request.args.get("season", "").strip()
 
+    generated_outfits = []
 
-@app.route("/remove/<name>", methods=["POST"])
-def remove_item(name):
-    wardrobe_manager.remove_clothing(name)
-    wardrobe_manager.save_wardrobe()
+    if occasion and season:
+        generated_outfits = wardrobe_manager.generate_outfits(
+            occasion,
+            season
+        )
 
-    return redirect(url_for("home"))
-
+    return render_template(
+        "outfits.html",
+        outfits=generated_outfits,
+        selected_occasion=occasion,
+        selected_season=season
+    )
 
 @app.route("/edit/<name>", methods=["GET", "POST"])
 def edit_item(name):

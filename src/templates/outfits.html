@@ -1,0 +1,264 @@
+{% extends "base.html" %}
+
+{% block title %}Outfits - MyCloset{% endblock %}
+
+{% block content %}
+
+<section class="hero">
+
+    <h1>Outfit Generator</h1>
+
+    <p class="subtitle">
+        Create outfit combinations from your wardrobe.
+    </p>
+
+</section>
+
+
+<section class="filter-section">
+
+    <div class="section-heading">
+
+        <h2>Generate an Outfit</h2>
+
+        <p>
+            Choose an occasion and season to find suitable combinations.
+        </p>
+
+    </div>
+
+
+    <form
+        action="{{ url_for('outfits') }}"
+        method="GET"
+        class="filter-form"
+    >
+
+        <div class="filter-grid">
+
+            <div class="filter-group">
+
+                <label for="occasion">
+                    Occasion
+                </label>
+
+                <select
+                    id="occasion"
+                    name="occasion"
+                    required
+                >
+
+                    <option value="">
+                        Select Occasion
+                    </option>
+
+                    <option
+                        value="Casual"
+                        {% if selected_occasion == "Casual" %}selected{% endif %}
+                    >
+                        Casual
+                    </option>
+
+                    <option
+                        value="Formal"
+                        {% if selected_occasion == "Formal" %}selected{% endif %}
+                    >
+                        Formal
+                    </option>
+
+                    <option
+                        value="Party"
+                        {% if selected_occasion == "Party" %}selected{% endif %}
+                    >
+                        Party
+                    </option>
+
+                    <option
+                        value="Sports"
+                        {% if selected_occasion == "Sports" %}selected{% endif %}
+                    >
+                        Sports
+                    </option>
+
+                    <option
+                        value="Work"
+                        {% if selected_occasion == "Work" %}selected{% endif %}
+                    >
+                        Work
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="filter-group">
+
+                <label for="season">
+                    Season
+                </label>
+
+                <select
+                    id="season"
+                    name="season"
+                    required
+                >
+
+                    <option value="">
+                        Select Season
+                    </option>
+
+                    <option
+                        value="Spring"
+                        {% if selected_season == "Spring" %}selected{% endif %}
+                    >
+                        Spring
+                    </option>
+
+                    <option
+                        value="Summer"
+                        {% if selected_season == "Summer" %}selected{% endif %}
+                    >
+                        Summer
+                    </option>
+
+                    <option
+                        value="Autumn"
+                        {% if selected_season == "Autumn" %}selected{% endif %}
+                    >
+                        Autumn
+                    </option>
+
+                    <option
+                        value="Winter"
+                        {% if selected_season == "Winter" %}selected{% endif %}
+                    >
+                        Winter
+                    </option>
+
+                    <option
+                        value="All Season"
+                        {% if selected_season == "All Season" %}selected{% endif %}
+                    >
+                        All Season
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+
+        <div class="filter-actions">
+
+            <button
+                type="submit"
+                class="filter-button"
+            >
+                Generate Outfits
+            </button>
+
+        </div>
+
+    </form>
+
+</section>
+
+
+{% if outfits %}
+
+<section class="results-section">
+
+    <div class="results-header">
+
+        <h2>Generated Outfits</h2>
+
+        <span class="result-count">
+            {{ outfits|length }} outfit(s)
+        </span>
+
+    </div>
+
+
+    <div class="wardrobe">
+
+        {% for outfit in outfits %}
+
+        <div class="item-card">
+
+            <div class="item-card-header">
+
+                <div>
+
+                    <h3>
+                        Outfit {{ loop.index }}
+                    </h3>
+
+                    <span class="category-badge">
+                        {{ selected_occasion }} · {{ selected_season }}
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="item-details">
+
+                {% for item in outfit %}
+
+                <p>
+
+                    <strong>
+                        {{ item.category }}
+                    </strong>
+
+                    <span>
+                        {{ item.name }}
+                    </span>
+
+                </p>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+
+{% elif selected_occasion and selected_season %}
+
+<section class="empty-message">
+
+    <h3>No outfits found</h3>
+
+    <p>
+        We couldn't create an outfit for
+        <strong>{{ selected_occasion }}</strong>
+        in
+        <strong>{{ selected_season }}</strong>.
+    </p>
+
+    <p>
+        Try adding suitable tops, bottoms, and shoes to your wardrobe.
+    </p>
+
+    <a
+        href="{{ url_for('add_item') }}"
+        class="add-button"
+    >
+        Add Clothing Item
+    </a>
+
+</section>
+
+{% endif %}
+
+{% endblock %}
