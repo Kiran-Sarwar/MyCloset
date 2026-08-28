@@ -263,6 +263,92 @@ class TestWardrobeManager(unittest.TestCase):
             os.chdir(original_directory)
             shutil.rmtree(temporary_directory)
 
+    def test_edit_clothing(self):
+        manager = WardrobeManager()
+
+        manager.add_clothing(
+            "Black T-shirt",
+            "Tops",
+            "Casual",
+            "Black",
+            "Summer",
+            "T-Shirt"
+        )
+
+        manager.edit_clothing(
+            "Black T-shirt",
+            "White Polo",
+            "Tops",
+            "Smart Casual",
+            "White",
+            "Summer",
+            "Polo"
+        )
+
+        self.assertEqual(len(manager.wardrobe), 1)
+        self.assertEqual(manager.wardrobe[0].name, "White Polo")
+        self.assertEqual(manager.wardrobe[0].category, "Tops")
+        self.assertEqual(manager.wardrobe[0].occasion, "Smart Casual")
+        self.assertEqual(manager.wardrobe[0].color, "White")
+        self.assertEqual(manager.wardrobe[0].season, "Summer")
+        self.assertEqual(manager.wardrobe[0].item_type, "Polo")
+
+    def test_edit_clothing_case_insensitive(self):
+        manager = WardrobeManager()
+
+        manager.add_clothing(
+            "Black T-shirt",
+            "Tops",
+            "Casual",
+            "Black",
+            "Summer"
+        )
+
+        manager.edit_clothing(
+            "BLACK T-SHIRT",
+            "White T-shirt",
+            "Tops",
+            "Casual",
+            "White",
+            "Summer"
+        )
+
+        self.assertEqual(
+            manager.wardrobe[0].name,
+            "White T-shirt"
+        )
+
+        self.assertEqual(
+            manager.wardrobe[0].color,
+            "White"
+        )
+
+    def test_edit_clothing_not_found(self):
+        manager = WardrobeManager()
+
+        manager.add_clothing(
+            "Black T-shirt",
+            "Tops",
+            "Casual",
+            "Black",
+            "Summer"
+        )
+
+        manager.edit_clothing(
+            "Blue Shirt",
+            "White Shirt",
+            "Tops",
+            "Casual",
+            "White",
+            "Summer"
+        )
+
+        self.assertEqual(len(manager.wardrobe), 1)
+        self.assertEqual(
+            manager.wardrobe[0].name,
+            "Black T-shirt"
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
