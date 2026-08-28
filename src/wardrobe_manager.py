@@ -61,6 +61,7 @@ class WardrobeManager:
         keyword: str
     ) -> list[ClothingItem]:
         keyword = keyword.lower()
+
         return [
             item
             for item in self.wardrobe
@@ -78,9 +79,11 @@ class WardrobeManager:
         for item in self.wardrobe:
             if item.name.lower() == name.lower():
                 self.wardrobe.remove(item)
+
                 print(
                     f"{name} has been removed from your wardrobe."
                 )
+
                 return
 
         print(f"{name} not found in your wardrobe.")
@@ -107,12 +110,73 @@ class WardrobeManager:
                 print(
                     f"{old_name} has been updated to {name}."
                 )
+
                 return
 
         print(f"{old_name} not found in your wardrobe.")
 
+    def recommend_items(
+        self,
+        occasion: str,
+        season: str
+    ) -> list[ClothingItem]:
+        return [
+            item
+            for item in self.wardrobe
+            if (
+                item.occasion.lower() == occasion.lower()
+                and (
+                    item.season.lower() == season.lower()
+                    or item.season.lower() == "all-season"
+                    or item.season.lower() == "all season"
+                )
+            )
+        ]
+
+    def generate_outfits(
+        self,
+        occasion: str,
+        season: str
+    ) -> list[list[ClothingItem]]:
+        suitable_items = self.recommend_items(
+            occasion,
+            season
+        )
+
+        tops = [
+            item
+            for item in suitable_items
+            if item.category.lower() == "tops"
+        ]
+
+        bottoms = [
+            item
+            for item in suitable_items
+            if item.category.lower() == "bottoms"
+        ]
+
+        shoes = [
+            item
+            for item in suitable_items
+            if item.category.lower() == "shoes"
+        ]
+
+        outfits = []
+
+        for top in tops:
+            for bottom in bottoms:
+                for shoe in shoes:
+                    outfits.append([
+                        top,
+                        bottom,
+                        shoe
+                    ])
+
+        return outfits
+
     def show_item_count(self) -> None:
         count = len(self.wardrobe)
+
         print(
             f"You have {count} item(s) in your wardrobe."
         )
@@ -146,12 +210,26 @@ class WardrobeManager:
                     parts = line.strip().split(",")
 
                     if len(parts) == 6:
-                        name, category, item_type, occasion, color, season = (
-                            parts
-                        )
+                        (
+                            name,
+                            category,
+                            item_type,
+                            occasion,
+                            color,
+                            season
+                        ) = parts
+
                     elif len(parts) == 5:
-                        name, category, occasion, color, season = parts
+                        (
+                            name,
+                            category,
+                            occasion,
+                            color,
+                            season
+                        ) = parts
+
                         item_type = ""
+
                     else:
                         continue
 
