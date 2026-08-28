@@ -18,106 +18,127 @@
 <section class="dashboard">
 
     <div class="stat-card">
-
         <span class="stat-number">
             {{ total_items }}
         </span>
-
         <span class="stat-label">
             Total Items
         </span>
-
     </div>
 
-
     <div class="stat-card">
-
         <span class="stat-number">
             {{ tops_count }}
         </span>
-
         <span class="stat-label">
             Tops
         </span>
-
     </div>
 
-
     <div class="stat-card">
-
         <span class="stat-number">
             {{ bottoms_count }}
         </span>
-
         <span class="stat-label">
             Bottoms
         </span>
-
     </div>
 
-
     <div class="stat-card">
-
         <span class="stat-number">
             {{ one_piece_count }}
         </span>
-
         <span class="stat-label">
             One-Piece
         </span>
-
     </div>
 
-
     <div class="stat-card">
-
         <span class="stat-number">
             {{ outerwear_count }}
         </span>
-
         <span class="stat-label">
             Outerwear
         </span>
-
     </div>
 
-
     <div class="stat-card">
-
         <span class="stat-number">
             {{ shoes_count }}
         </span>
-
         <span class="stat-label">
             Shoes
         </span>
-
     </div>
 
-
     <div class="stat-card">
-
         <span class="stat-number">
             {{ accessories_count }}
         </span>
-
         <span class="stat-label">
             Accessories
         </span>
-
     </div>
 
 </section>
 
 
+<!-- Search -->
+
+<section class="search-section">
+
+    <div class="section-heading">
+
+        <h2>Search Your Wardrobe</h2>
+
+        <p>
+            Find a clothing item by name.
+        </p>
+
+    </div>
+
+    <form
+        action="/search"
+        method="GET"
+        class="search-form"
+    >
+
+        <div class="search-input-wrapper">
+
+            <span class="search-icon">🔍</span>
+
+            <input
+                type="text"
+                id="name"
+                name="name"
+                value="{{ search_name | default('') }}"
+                placeholder="Search clothing... e.g. black shirt"
+            >
+
+        </div>
+
+        <button
+            type="submit"
+            class="search-button"
+        >
+            Search
+        </button>
+
+    </form>
+
+</section>
+
+
+<!-- Filters -->
+
 <section class="filter-section">
 
     <div class="section-heading">
 
-        <h2>My Wardrobe</h2>
+        <h2>Filter Your Wardrobe</h2>
 
         <p>
-            Find exactly what you're looking for.
+            Narrow down your wardrobe using multiple filters.
         </p>
 
     </div>
@@ -126,8 +147,17 @@
     <form
         action="/search"
         method="GET"
-        class="search-form"
+        class="filter-form"
     >
+
+        <!-- Preserve the name search when using filters -->
+
+        <input
+            type="hidden"
+            name="name"
+            value="{{ search_name | default('') }}"
+        >
+
 
         <div class="filter-grid">
 
@@ -485,7 +515,6 @@
                 Apply Filters
             </button>
 
-
             <a
                 href="/"
                 class="clear-button"
@@ -499,6 +528,8 @@
 
 </section>
 
+
+<!-- Wardrobe Results -->
 
 {% if wardrobe %}
 
@@ -561,19 +592,30 @@
                 </div>
 
 
-                <form
-                    action="/remove/{{ item.name }}"
-                    method="POST"
-                >
+                <div class="item-actions">
 
-                    <button
-                        type="submit"
-                        class="remove-button"
+                    <a
+                        href="/edit/{{ item.name }}"
+                        class="edit-button"
                     >
-                        Remove
-                    </button>
+                        Edit
+                    </a>
 
-                </form>
+                    <form
+                        action="/remove/{{ item.name }}"
+                        method="POST"
+                    >
+
+                        <button
+                            type="submit"
+                            class="remove-button"
+                        >
+                            Remove
+                        </button>
+
+                    </form>
+
+                </div>
 
             </div>
 
@@ -588,7 +630,7 @@
         <h3>No clothing items found</h3>
 
         <p>
-            Try changing your filters or add a new item.
+            Try changing your search or filters, or add a new item.
         </p>
 
         <a
@@ -702,9 +744,7 @@
                 if (
                     type === "{{ search_type }}"
                 ) {
-
                     option.selected = true;
-
                 }
 
 

@@ -1,0 +1,530 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Item - MyCloset{% endblock %}
+
+{% block content %}
+
+<section class="hero">
+
+    <h1>Edit Clothing Item</h1>
+
+    <p class="subtitle">
+        Update the details of your clothing item.
+    </p>
+
+</section>
+
+
+<section class="form-section">
+
+    <div class="section-heading">
+
+        <h2>Edit {{ item.name }}</h2>
+
+        <p>
+            Change any information below and save your changes.
+        </p>
+
+    </div>
+
+
+    <form
+        action="/edit/{{ item.name }}"
+        method="POST"
+        class="clothing-form"
+    >
+
+        <div class="form-group">
+
+            <label for="name">
+                Name
+            </label>
+
+            <input
+                type="text"
+                id="name"
+                name="name"
+                value="{{ item.name }}"
+                required
+            >
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label for="category">
+                Category
+            </label>
+
+            <select
+                id="category"
+                name="category"
+                required
+            >
+
+                <option
+                    value="Tops"
+                    {% if item.category == "Tops" %}
+                        selected
+                    {% endif %}
+                >
+                    Tops
+                </option>
+
+                <option
+                    value="Bottoms"
+                    {% if item.category == "Bottoms" %}
+                        selected
+                    {% endif %}
+                >
+                    Bottoms
+                </option>
+
+                <option
+                    value="One-Piece"
+                    {% if item.category == "One-Piece" %}
+                        selected
+                    {% endif %}
+                >
+                    One-Piece
+                </option>
+
+                <option
+                    value="Outerwear"
+                    {% if item.category == "Outerwear" %}
+                        selected
+                    {% endif %}
+                >
+                    Outerwear
+                </option>
+
+                <option
+                    value="Shoes"
+                    {% if item.category == "Shoes" %}
+                        selected
+                    {% endif %}
+                >
+                    Shoes
+                </option>
+
+                <option
+                    value="Accessories"
+                    {% if item.category == "Accessories" %}
+                        selected
+                    {% endif %}
+                >
+                    Accessories
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label for="item_type">
+                Type
+            </label>
+
+            <select
+                id="item_type"
+                name="item_type"
+            >
+            </select>
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label for="occasion">
+                Occasion
+            </label>
+
+            <select
+                id="occasion"
+                name="occasion"
+                required
+            >
+
+                <option
+                    value="Casual"
+                    {% if item.occasion == "Casual" %}
+                        selected
+                    {% endif %}
+                >
+                    Casual
+                </option>
+
+                <option
+                    value="Formal"
+                    {% if item.occasion == "Formal" %}
+                        selected
+                    {% endif %}
+                >
+                    Formal
+                </option>
+
+                <option
+                    value="Party"
+                    {% if item.occasion == "Party" %}
+                        selected
+                    {% endif %}
+                >
+                    Party
+                </option>
+
+                <option
+                    value="Sports"
+                    {% if item.occasion == "Sports" %}
+                        selected
+                    {% endif %}
+                >
+                    Sports
+                </option>
+
+                <option
+                    value="Work"
+                    {% if item.occasion == "Work" %}
+                        selected
+                    {% endif %}
+                >
+                    Work
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label for="color">
+                Color
+            </label>
+
+            <select
+                id="color"
+                name="color"
+                required
+            >
+
+                <option
+                    value="Black"
+                    {% if item.color == "Black" %}
+                        selected
+                    {% endif %}
+                >
+                    Black
+                </option>
+
+                <option
+                    value="White"
+                    {% if item.color == "White" %}
+                        selected
+                    {% endif %}
+                >
+                    White
+                </option>
+
+                <option
+                    value="Blue"
+                    {% if item.color == "Blue" %}
+                        selected
+                    {% endif %}
+                >
+                    Blue
+                </option>
+
+                <option
+                    value="Red"
+                    {% if item.color == "Red" %}
+                        selected
+                    {% endif %}
+                >
+                    Red
+                </option>
+
+                <option
+                    value="Green"
+                    {% if item.color == "Green" %}
+                        selected
+                    {% endif %}
+                >
+                    Green
+                </option>
+
+                <option
+                    value="Yellow"
+                    {% if item.color == "Yellow" %}
+                        selected
+                    {% endif %}
+                >
+                    Yellow
+                </option>
+
+                <option
+                    value="Pink"
+                    {% if item.color == "Pink" %}
+                        selected
+                    {% endif %}
+                >
+                    Pink
+                </option>
+
+                <option
+                    value="Brown"
+                    {% if item.color == "Brown" %}
+                        selected
+                    {% endif %}
+                >
+                    Brown
+                </option>
+
+                <option
+                    value="Grey"
+                    {% if item.color == "Grey" %}
+                        selected
+                    {% endif %}
+                >
+                    Grey
+                </option>
+
+                <option
+                    value="Beige"
+                    {% if item.color == "Beige" %}
+                        selected
+                    {% endif %}
+                >
+                    Beige
+                </option>
+
+                <option
+                    value="Purple"
+                    {% if item.color == "Purple" %}
+                        selected
+                    {% endif %}
+                >
+                    Purple
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label for="season">
+                Season
+            </label>
+
+            <select
+                id="season"
+                name="season"
+                required
+            >
+
+                <option
+                    value="Spring"
+                    {% if item.season == "Spring" %}
+                        selected
+                    {% endif %}
+                >
+                    Spring
+                </option>
+
+                <option
+                    value="Summer"
+                    {% if item.season == "Summer" %}
+                        selected
+                    {% endif %}
+                >
+                    Summer
+                </option>
+
+                <option
+                    value="Autumn"
+                    {% if item.season == "Autumn" %}
+                        selected
+                    {% endif %}
+                >
+                    Autumn
+                </option>
+
+                <option
+                    value="Winter"
+                    {% if item.season == "Winter" %}
+                        selected
+                    {% endif %}
+                >
+                    Winter
+                </option>
+
+                <option
+                    value="All Season"
+                    {% if item.season == "All Season" %}
+                        selected
+                    {% endif %}
+                >
+                    All Season
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="form-actions">
+
+            <button
+                type="submit"
+                class="add-button"
+            >
+                Save Changes
+            </button>
+
+            <a
+                href="/"
+                class="clear-button"
+            >
+                Cancel
+            </a>
+
+        </div>
+
+    </form>
+
+</section>
+
+
+<script>
+
+    const categorySelect =
+        document.getElementById("category");
+
+    const typeSelect =
+        document.getElementById("item_type");
+
+
+    const currentType =
+        "{{ item.item_type }}";
+
+
+    const categoryTypes = {
+
+        "Tops": [
+            "T-Shirt",
+            "Shirt",
+            "Blouse",
+            "Sweater",
+            "Hoodie"
+        ],
+
+        "Bottoms": [
+            "Jeans",
+            "Trousers",
+            "Shorts",
+            "Skirt"
+        ],
+
+        "One-Piece": [
+            "Dress",
+            "Jumpsuit"
+        ],
+
+        "Outerwear": [
+            "Jacket",
+            "Coat",
+            "Blazer"
+        ],
+
+        "Shoes": [
+            "Sneakers",
+            "Boots",
+            "Sandals",
+            "Formal Shoes"
+        ],
+
+        "Accessories": [
+            "Bag",
+            "Scarf",
+            "Hat",
+            "Belt",
+            "Jewelry"
+        ]
+
+    };
+
+
+    function updateTypes() {
+
+        const selectedCategory =
+            categorySelect.value;
+
+        typeSelect.innerHTML = "";
+
+
+        const defaultOption =
+            document.createElement("option");
+
+        defaultOption.value = "";
+
+        defaultOption.textContent =
+            "Select Type";
+
+        typeSelect.appendChild(defaultOption);
+
+
+        if (selectedCategory === "") {
+
+            typeSelect.disabled = true;
+
+            return;
+        }
+
+
+        typeSelect.disabled = false;
+
+
+        categoryTypes[selectedCategory].forEach(
+            function(type) {
+
+                const option =
+                    document.createElement("option");
+
+                option.value = type;
+
+                option.textContent = type;
+
+
+                if (type === currentType) {
+                    option.selected = true;
+                }
+
+
+                typeSelect.appendChild(option);
+
+            }
+        );
+
+    }
+
+
+    categorySelect.addEventListener(
+        "change",
+        function() {
+
+            updateTypes();
+
+        }
+    );
+
+
+    updateTypes();
+
+</script>
+
+{% endblock %}
