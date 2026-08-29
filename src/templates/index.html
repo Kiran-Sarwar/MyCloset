@@ -5,79 +5,47 @@
 {% block content %}
 
 <section class="hero">
-
     <h1>Welcome to MyCloset!</h1>
-
     <p class="subtitle">
         Your digital wardrobe, organized your way.
     </p>
-
 </section>
-
 
 <section class="dashboard">
 
     <div class="stat-card">
-        <span class="stat-number">
-            {{ total_items }}
-        </span>
-        <span class="stat-label">
-            Total Items
-        </span>
+        <span class="stat-number">{{ total_items }}</span>
+        <span class="stat-label">Total Items</span>
     </div>
 
     <div class="stat-card">
-        <span class="stat-number">
-            {{ tops_count }}
-        </span>
-        <span class="stat-label">
-            Tops
-        </span>
+        <span class="stat-number">{{ tops_count }}</span>
+        <span class="stat-label">Tops</span>
     </div>
 
     <div class="stat-card">
-        <span class="stat-number">
-            {{ bottoms_count }}
-        </span>
-        <span class="stat-label">
-            Bottoms
-        </span>
+        <span class="stat-number">{{ bottoms_count }}</span>
+        <span class="stat-label">Bottoms</span>
     </div>
 
     <div class="stat-card">
-        <span class="stat-number">
-            {{ one_piece_count }}
-        </span>
-        <span class="stat-label">
-            One-Piece
-        </span>
+        <span class="stat-number">{{ one_piece_count }}</span>
+        <span class="stat-label">One-Piece</span>
     </div>
 
     <div class="stat-card">
-        <span class="stat-number">
-            {{ outerwear_count }}
-        </span>
-        <span class="stat-label">
-            Outerwear
-        </span>
+        <span class="stat-number">{{ outerwear_count }}</span>
+        <span class="stat-label">Outerwear</span>
     </div>
 
     <div class="stat-card">
-        <span class="stat-number">
-            {{ shoes_count }}
-        </span>
-        <span class="stat-label">
-            Shoes
-        </span>
+        <span class="stat-number">{{ shoes_count }}</span>
+        <span class="stat-label">Shoes</span>
     </div>
 
     <div class="stat-card">
-        <span class="stat-number">
-            {{ accessories_count }}
-        </span>
-        <span class="stat-label">
-            Accessories
-        </span>
+        <span class="stat-number">{{ accessories_count }}</span>
+        <span class="stat-label">Accessories</span>
     </div>
 
 </section>
@@ -88,13 +56,10 @@
 <section class="search-section">
 
     <div class="section-heading">
-
         <h2>Search Your Wardrobe</h2>
-
         <p>
             Find a clothing item by name.
         </p>
-
     </div>
 
     <form
@@ -134,15 +99,11 @@
 <section class="filter-section">
 
     <div class="section-heading">
-
         <h2>Filter Your Wardrobe</h2>
-
         <p>
             Narrow down your wardrobe using multiple filters.
         </p>
-
     </div>
-
 
     <form
         action="/search"
@@ -158,8 +119,9 @@
             value="{{ search_name | default('') }}"
         >
 
-
         <div class="filter-grid">
+
+            <!-- Category -->
 
             <div class="filter-group">
 
@@ -178,54 +140,42 @@
 
                     <option
                         value="Tops"
-                        {% if search_category == "Tops" %}
-                            selected
-                        {% endif %}
+                        {% if search_category == "Tops" %}selected{% endif %}
                     >
                         Tops
                     </option>
 
                     <option
                         value="Bottoms"
-                        {% if search_category == "Bottoms" %}
-                            selected
-                        {% endif %}
+                        {% if search_category == "Bottoms" %}selected{% endif %}
                     >
                         Bottoms
                     </option>
 
                     <option
                         value="One-Piece"
-                        {% if search_category == "One-Piece" %}
-                            selected
-                        {% endif %}
+                        {% if search_category == "One-Piece" %}selected{% endif %}
                     >
                         One-Piece
                     </option>
 
                     <option
                         value="Outerwear"
-                        {% if search_category == "Outerwear" %}
-                            selected
-                        {% endif %}
+                        {% if search_category == "Outerwear" %}selected{% endif %}
                     >
                         Outerwear
                     </option>
 
                     <option
                         value="Shoes"
-                        {% if search_category == "Shoes" %}
-                            selected
-                        {% endif %}
+                        {% if search_category == "Shoes" %}selected{% endif %}
                     >
                         Shoes
                     </option>
 
                     <option
                         value="Accessories"
-                        {% if search_category == "Accessories" %}
-                            selected
-                        {% endif %}
+                        {% if search_category == "Accessories" %}selected{% endif %}
                     >
                         Accessories
                     </option>
@@ -234,6 +184,8 @@
 
             </div>
 
+
+            <!-- Type -->
 
             <div class="filter-group">
 
@@ -255,6 +207,8 @@
             </div>
 
 
+            <!-- Occasion -->
+
             <div class="filter-group">
 
                 <label for="occasion">
@@ -272,45 +226,35 @@
 
                     <option
                         value="Casual"
-                        {% if search_occasion == "Casual" %}
-                            selected
-                        {% endif %}
+                        {% if search_occasion == "Casual" %}selected{% endif %}
                     >
                         Casual
                     </option>
 
                     <option
                         value="Formal"
-                        {% if search_occasion == "Formal" %}
-                            selected
-                        {% endif %}
+                        {% if search_occasion == "Formal" %}selected{% endif %}
                     >
                         Formal
                     </option>
 
                     <option
                         value="Party"
-                        {% if search_occasion == "Party" %}
-                            selected
-                        {% endif %}
+                        {% if search_occasion == "Party" %}selected{% endif %}
                     >
                         Party
                     </option>
 
                     <option
                         value="Sports"
-                        {% if search_occasion == "Sports" %}
-                            selected
-                        {% endif %}
+                        {% if search_occasion == "Sports" %}selected{% endif %}
                     >
                         Sports
                     </option>
 
                     <option
                         value="Work"
-                        {% if search_occasion == "Work" %}
-                            selected
-                        {% endif %}
+                        {% if search_occasion == "Work" %}selected{% endif %}
                     >
                         Work
                     </option>
@@ -319,6 +263,8 @@
 
             </div>
 
+
+            <!-- Color -->
 
             <div class="filter-group">
 
@@ -337,99 +283,77 @@
 
                     <option
                         value="Black"
-                        {% if search_color == "Black" %}
-                            selected
-                        {% endif %}
+                        {% if search_color == "Black" %}selected{% endif %}
                     >
                         Black
                     </option>
 
                     <option
                         value="White"
-                        {% if search_color == "White" %}
-                            selected
-                        {% endif %}
+                        {% if search_color == "White" %}selected{% endif %}
                     >
                         White
                     </option>
 
                     <option
                         value="Blue"
-                        {% if search_color == "Blue" %}
-                            selected
-                        {% endif %}
+                        {% if search_color == "Blue" %}selected{% endif %}
                     >
                         Blue
                     </option>
 
                     <option
                         value="Red"
-                        {% if search_color == "Red" %}
-                            selected
-                        {% endif %}
+                        {% if search_color == "Red" %}selected{% endif %}
                     >
                         Red
                     </option>
 
                     <option
                         value="Green"
-                        {% if search_color == "Green" %}
-                            selected
-                        {% endif %}
+                        {% if search_color == "Green" %}selected{% endif %}
                     >
                         Green
                     </option>
 
                     <option
                         value="Yellow"
-                        {% if search_color == "Yellow" %}
-                            selected
-                        {% endif %}
+                        {% if search_color == "Yellow" %}selected{% endif %}
                     >
                         Yellow
                     </option>
 
                     <option
                         value="Pink"
-                        {% if search_color == "Pink" %}
-                            selected
-                        {% endif %}
+                        {% if search_color == "Pink" %}selected{% endif %}
                     >
                         Pink
                     </option>
 
                     <option
                         value="Brown"
-                        {% if search_color == "Brown" %}
-                            selected
-                        {% endif %}
+                        {% if search_color == "Brown" %}selected{% endif %}
                     >
                         Brown
                     </option>
 
                     <option
                         value="Grey"
-                        {% if search_color == "Grey" %}
-                            selected
-                        {% endif %}
+                        {% if search_color == "Grey" %}selected{% endif %}
                     >
                         Grey
                     </option>
 
                     <option
                         value="Beige"
-                        {% if search_color == "Beige" %}
-                            selected
-                        {% endif %}
+                        {% if search_color == "Beige" %}selected{% endif %}
                     >
                         Beige
                     </option>
 
                     <option
                         value="Purple"
-                        {% if search_color == "Purple" %}
-                            selected
-                        {% endif %}
+                        {% if search_color == "Purple" %}selected{% endif %}
                     >
                         Purple
                     </option>
@@ -438,6 +362,8 @@
 
             </div>
 
+
+            <!-- Season -->
 
             <div class="filter-group">
 
@@ -456,45 +382,35 @@
 
                     <option
                         value="Spring"
-                        {% if search_season == "Spring" %}
-                            selected
-                        {% endif %}
+                        {% if search_season == "Spring" %}selected{% endif %}
                     >
                         Spring
                     </option>
 
                     <option
                         value="Summer"
-                        {% if search_season == "Summer" %}
-                            selected
-                        {% endif %}
+                        {% if search_season == "Summer" %}selected{% endif %}
                     >
                         Summer
                     </option>
 
                     <option
                         value="Autumn"
-                        {% if search_season == "Autumn" %}
-                            selected
-                        {% endif %}
+                        {% if search_season == "Autumn" %}selected{% endif %}
                     >
                         Autumn
                     </option>
 
                     <option
                         value="Winter"
-                        {% if search_season == "Winter" %}
-                            selected
-                        {% endif %}
+                        {% if search_season == "Winter" %}selected{% endif %}
                     >
                         Winter
                     </option>
 
                     <option
                         value="All Season"
-                        {% if search_season == "All Season" %}
-                            selected
-                        {% endif %}
+                        {% if search_season == "All Season" %}selected{% endif %}
                     >
                         All Season
                     </option>
@@ -550,6 +466,24 @@
 
             <div class="item-card">
 
+                <!-- Clothing Image -->
+
+                {% if item.image_path %}
+
+                    <div class="item-image">
+
+                        <img
+                            src="{{ url_for('static', filename=item.image_path) }}"
+                            alt="{{ item.name }}"
+                        >
+
+                    </div>
+
+                {% endif %}
+
+
+                <!-- Card Header -->
+
                 <div class="item-card-header">
 
                     <div>
@@ -566,6 +500,8 @@
 
                 </div>
 
+
+                <!-- Item Details -->
 
                 <div class="item-details">
 
@@ -591,6 +527,8 @@
 
                 </div>
 
+
+                <!-- Item Actions -->
 
                 <div class="item-actions">
 
@@ -653,6 +591,7 @@
     const typeSelect =
         document.getElementById("item_type");
 
+
     function updateTypes() {
 
         const selectedCategory =
@@ -669,7 +608,9 @@
         defaultOption.textContent =
             "All Types";
 
-        typeSelect.appendChild(defaultOption);
+        typeSelect.appendChild(
+            defaultOption
+        );
 
 
         if (selectedCategory === "") {
@@ -681,6 +622,14 @@
 
 
         typeSelect.disabled = false;
+
+
+        if (
+            typeof categoryTypes === "undefined" ||
+            !categoryTypes[selectedCategory]
+        ) {
+            return;
+        }
 
 
         categoryTypes[selectedCategory].forEach(
@@ -701,7 +650,9 @@
                 }
 
 
-                typeSelect.appendChild(option);
+                typeSelect.appendChild(
+                    option
+                );
 
             }
         );

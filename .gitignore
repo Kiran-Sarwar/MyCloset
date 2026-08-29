@@ -1,2 +1,8 @@
 __pycache__/
 *.pyc
+
+# Local database
+*.db
+
+# Uploaded clothing images
+src/static/uploads/

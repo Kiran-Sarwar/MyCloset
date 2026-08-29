@@ -1,12 +1,120 @@
-from clothing_item import ClothingItem
 from pathlib import Path
+
+from clothing_item import ClothingItem
+from database import Database
 
 
 class WardrobeManager:
-
-    def __init__(self) -> None:
+    def __init__(
+        self,
+        db_path: str | Path | None = None
+    ) -> None:
         self.wardrobe: list[ClothingItem] = []
-        self.file_path = Path(__file__).parent / "wardrobe.txt"
+
+        self.legacy_file_path = (
+            Path(__file__).parent / "wardrobe.txt"
+        )
+
+        if db_path is None:
+            db_path = Path(__file__).parent / "mycloset.db"
+
+        self.database = Database(db_path)
+
+        self._migrate_legacy_data()
+
+    def _migrate_legacy_data(self) -> None:
+        """
+        Migrate existing wardrobe.txt data into SQLite
+        when the database is empty.
+        """
+        if self.database.has_items():
+            return
+
+        if not self.legacy_file_path.exists():
+            return
+
+        migrated_items = []
+
+        with open(
+            self.legacy_file_path,
+            "r",
+            encoding="utf-8"
+        ) as file:
+            for line in file:
+                if not line.strip():
+                    continue
+
+                parts = line.strip().split(",")
+
+                if len(parts) == 8:
+                    (
+                        item_id,
+                        name,
+                        category,
+                        item_type,
+                        occasion,
+                        color,
+                        season,
+                        image_path
+                    ) = parts
+
+                elif len(parts) == 7:
+                    (
+                        item_id,
+                        name,
+                        category,
+                        item_type,
+                        occasion,
+                        color,
+                        season
+                    ) = parts
+
+                    image_path = ""
+
+                elif len(parts) == 6:
+                    (
+                        name,
+                        category,
+                        item_type,
+                        occasion,
+                        color,
+                        season
+                    ) = parts
+
+                    item_id = ""
+                    image_path = ""
+
+                elif len(parts) == 5:
+                    (
+                        name,
+                        category,
+                        occasion,
+                        color,
+                        season
+                    ) = parts
+
+                    item_id = ""
+                    item_type = ""
+                    image_path = ""
+
+                else:
+                    continue
+
+                item = ClothingItem(
+                    name,
+                    category,
+                    occasion,
+                    color,
+                    season,
+                    item_type,
+                    image_path,
+                    item_id
+                )
+
+                migrated_items.append(item)
+
+        if migrated_items:
+            self.database.save_items(migrated_items)
 
     def add_clothing(
         self,
@@ -15,7 +123,8 @@ class WardrobeManager:
         occasion: str,
         color: str,
         season: str,
-        item_type: str = ""
+        item_type: str = "",
+        image_path: str = ""
     ) -> None:
         clothing_item = ClothingItem(
             name,
@@ -23,16 +132,22 @@ class WardrobeManager:
             occasion,
             color,
             season,
-            item_type
+            item_type,
+            image_path
         )
+
         self.wardrobe.append(clothing_item)
-        print(f"{name} has been added to your wardrobe.")
+
+        print(
+            f"{name} has been added to your wardrobe."
+        )
 
     def view_wardrobe(self) -> None:
         if not self.wardrobe:
             print("Your wardrobe is empty.")
         else:
             print("\n--- Your Wardrobe ---")
+
             for item in self.wardrobe:
                 item.display()
 
@@ -86,7 +201,9 @@ class WardrobeManager:
 
                 return
 
-        print(f"{name} not found in your wardrobe.")
+        print(
+            f"{name} not found in your wardrobe."
+        )
 
     def edit_clothing(
         self,
@@ -113,7 +230,9 @@ class WardrobeManager:
 
                 return
 
-        print(f"{old_name} not found in your wardrobe.")
+        print(
+            f"{old_name} not found in your wardrobe."
+        )
 
     def recommend_items(
         self,
@@ -181,7 +300,10 @@ class WardrobeManager:
             f"You have {count} item(s) in your wardrobe."
         )
 
-    def get_category_count(self, category: str) -> int:
+    def get_category_count(
+        self,
+        category: str
+    ) -> int:
         return sum(
             1
             for item in self.wardrobe
@@ -189,62 +311,15 @@ class WardrobeManager:
         )
 
     def save_wardrobe(self) -> None:
-        with open(self.file_path, "w") as file:
-            for item in self.wardrobe:
-                file.write(
-                    f"{item.name},{item.category},{item.item_type},"
-                    f"{item.occasion},{item.color},{item.season}\n"
-                )
+        self.database.save_items(self.wardrobe)
 
-        print("Wardrobe saved to wardrobe.txt.")
+        print(
+            "Wardrobe saved to mycloset.db."
+        )
 
     def load_wardrobe(self) -> None:
-        self.wardrobe.clear()
+        self.wardrobe = self.database.load_items()
 
-        try:
-            with open(self.file_path, "r") as file:
-                for line in file:
-                    if not line.strip():
-                        continue
-
-                    parts = line.strip().split(",")
-
-                    if len(parts) == 6:
-                        (
-                            name,
-                            category,
-                            item_type,
-                            occasion,
-                            color,
-                            season
-                        ) = parts
-
-                    elif len(parts) == 5:
-                        (
-                            name,
-                            category,
-                            occasion,
-                            color,
-                            season
-                        ) = parts
-
-                        item_type = ""
-
-                    else:
-                        continue
-
-                    item = ClothingItem(
-                        name,
-                        category,
-                        occasion,
-                        color,
-                        season,
-                        item_type
-                    )
-
-                    self.wardrobe.append(item)
-
-            print("Wardrobe loaded from wardrobe.txt.")
-
-        except FileNotFoundError:
-            print("No saved wardrobe found.")
+        print(
+            "Wardrobe loaded from mycloset.db."
+        )

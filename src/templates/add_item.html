@@ -6,262 +6,432 @@
 
 <div class="form-container">
 
-    <h1>Add Clothing Item</h1>
 
-    <p class="subtitle">
-        Add a new piece to your digital wardrobe.
-    </p>
+<h1>Add Clothing Item</h1>
 
-    <form action="/add" method="POST" class="clothing-form">
+<p class="subtitle">
+    Add a new piece to your digital wardrobe.
+</p>
 
-        <div class="form-group">
+<form
+    action="/add"
+    method="POST"
+    enctype="multipart/form-data"
+    class="clothing-form"
+>
 
-            <label for="name">
-                Item Name
-            </label>
+    <div class="form-group">
 
-            <input
-                type="text"
-                id="name"
-                name="name"
-                placeholder="e.g. Black T-Shirt"
-                required
-            >
+        <label for="name">
+            Item Name
+        </label>
 
-        </div>
-
-
-        <div class="form-group">
-
-            <label for="category">
-                Category
-            </label>
-
-            <select
-                id="category"
-                name="category"
-                required
-            >
-
-                <option value="">
-                    Select a category
-                </option>
-
-                <option value="Tops">
-                    Tops
-                </option>
-
-                <option value="Bottoms">
-                    Bottoms
-                </option>
-
-                <option value="One-Piece">
-                    One-Piece
-                </option>
-
-                <option value="Outerwear">
-                    Outerwear
-                </option>
-
-                <option value="Shoes">
-                    Shoes
-                </option>
-
-                <option value="Accessories">
-                    Accessories
-                </option>
-
-            </select>
-
-        </div>
-
-
-        <div class="form-group">
-
-            <label for="item_type">
-                Type
-            </label>
-
-            <select
-                id="item_type"
-                name="item_type"
-                required
-                disabled
-            >
-
-                <option value="">
-                    Select a category first
-                </option>
-
-            </select>
-
-        </div>
-
-
-        <div class="form-group">
-
-            <label for="occasion">
-                Occasion
-            </label>
-
-            <select
-                id="occasion"
-                name="occasion"
-                required
-            >
-
-                <option value="">
-                    Select an occasion
-                </option>
-
-                <option value="Casual">
-                    Casual
-                </option>
-
-                <option value="Formal">
-                    Formal
-                </option>
-
-                <option value="Party">
-                    Party
-                </option>
-
-                <option value="Sports">
-                    Sports
-                </option>
-
-                <option value="Work">
-                    Work
-                </option>
-
-            </select>
-
-        </div>
-
-
-        <div class="form-group">
-
-            <label for="color">
-                Color
-            </label>
-
-            <input
-                type="text"
-                id="color"
-                name="color"
-                placeholder="e.g. Black"
-                required
-            >
-
-        </div>
-
-
-        <div class="form-group">
-
-            <label for="season">
-                Season
-            </label>
-
-            <select
-                id="season"
-                name="season"
-                required
-            >
-
-                <option value="">
-                    Select a season
-                </option>
-
-                <option value="Spring">
-                    Spring
-                </option>
-
-                <option value="Summer">
-                    Summer
-                </option>
-
-                <option value="Autumn">
-                    Autumn
-                </option>
-
-                <option value="Winter">
-                    Winter
-                </option>
-
-                <option value="All Season">
-                    All Season
-                </option>
-
-            </select>
-
-        </div>
-
-
-        <button
-            type="submit"
-            class="add-button"
+        <input
+            type="text"
+            id="name"
+            name="name"
+            placeholder="e.g. Black T-Shirt"
+            required
         >
-            Add to MyCloset
-        </button>
 
-    </form>
+    </div>
+
+
+    <div class="form-group">
+
+        <label for="category">
+            Category
+        </label>
+
+        <select
+            id="category"
+            name="category"
+            required
+        >
+
+            <option value="">
+                Select a category
+            </option>
+
+            <option value="Tops">
+                Tops
+            </option>
+
+            <option value="Bottoms">
+                Bottoms
+            </option>
+
+            <option value="One-Piece">
+                One-Piece
+            </option>
+
+            <option value="Outerwear">
+                Outerwear
+            </option>
+
+            <option value="Shoes">
+                Shoes
+            </option>
+
+            <option value="Accessories">
+                Accessories
+            </option>
+
+        </select>
+
+    </div>
+
+
+    <div class="form-group">
+
+        <label for="item_type">
+            Type
+        </label>
+
+        <select
+            id="item_type"
+            name="item_type"
+            required
+            disabled
+        >
+
+            <option value="">
+                Select a category first
+            </option>
+
+        </select>
+
+    </div>
+
+
+    <div class="form-group">
+
+        <label for="occasion">
+            Occasion
+        </label>
+
+        <select
+            id="occasion"
+            name="occasion"
+            required
+        >
+
+            <option value="">
+                Select an occasion
+            </option>
+
+            <option value="Casual">
+                Casual
+            </option>
+
+            <option value="Formal">
+                Formal
+            </option>
+
+            <option value="Party">
+                Party
+            </option>
+
+            <option value="Sports">
+                Sports
+            </option>
+
+            <option value="Work">
+                Work
+            </option>
+
+        </select>
+
+    </div>
+
+
+    <div class="form-group">
+
+        <label for="color">
+            Color
+        </label>
+
+        <input
+            type="text"
+            id="color"
+            name="color"
+            placeholder="e.g. Black"
+            required
+        >
+
+    </div>
+
+
+    <div class="form-group">
+
+        <label for="season">
+            Season
+        </label>
+
+        <select
+            id="season"
+            name="season"
+            required
+        >
+
+            <option value="">
+                Select a season
+            </option>
+
+            <option value="Spring">
+                Spring
+            </option>
+
+            <option value="Summer">
+                Summer
+            </option>
+
+            <option value="Autumn">
+                Autumn
+            </option>
+
+            <option value="Winter">
+                Winter
+            </option>
+
+            <option value="All Season">
+                All Season
+            </option>
+
+        </select>
+
+    </div>
+
+
+    <!-- Clothing Image -->
+
+    <div class="form-group">
+
+        <label for="image">
+            Clothing Image
+        </label>
+
+        <input
+            type="file"
+            id="image"
+            name="image"
+            accept=".jpg,.jpeg,.png,.gif,.webp"
+        >
+
+        <small>
+            Optional. Maximum file size: 5 MB.
+        </small>
+
+        <!-- Image Preview -->
+
+        <div
+            id="image-preview-container"
+            style="display: none; margin-top: 15px;"
+        >
+
+            <img
+                id="image-preview"
+                src=""
+                alt="Selected clothing image"
+                style="
+                    max-width: 200px;
+                    max-height: 200px;
+                    object-fit: cover;
+                    border-radius: 10px;
+                    display: block;
+                    margin-bottom: 10px;
+                "
+            >
+
+            <span
+                id="image-name"
+                style="
+                    display: block;
+                    margin-bottom: 10px;
+                    font-size: 14px;
+                "
+            ></span>
+
+            <button
+                type="button"
+                id="change-image-button"
+                class="edit-button"
+            >
+                Change Image
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <button
+        type="submit"
+        class="add-button"
+    >
+        Add to MyCloset
+    </button>
+
+</form>
+
 
 </div>
 
-
 <script>
 
-    const categorySelect = document.getElementById("category");
+    const categorySelect =
+        document.getElementById("category");
 
-    const typeSelect = document.getElementById("item_type");
+    const typeSelect =
+        document.getElementById("item_type");
 
-    categorySelect.addEventListener("change", function () {
 
-        const selectedCategory = categorySelect.value;
+    categorySelect.addEventListener(
+        "change",
+        function () {
 
-        typeSelect.innerHTML = "";
+            const selectedCategory =
+                categorySelect.value;
 
-        if (selectedCategory === "") {
+            typeSelect.innerHTML = "";
 
-            typeSelect.disabled = true;
 
-            const option = document.createElement("option");
+            if (selectedCategory === "") {
 
-            option.value = "";
+                typeSelect.disabled = true;
 
-            option.textContent = "Select a category first";
+                const option =
+                    document.createElement("option");
 
-            typeSelect.appendChild(option);
+                option.value = "";
 
-            return;
+                option.textContent =
+                    "Select a category first";
+
+                typeSelect.appendChild(option);
+
+                return;
+
+            }
+
+
+            typeSelect.disabled = false;
+
+
+            const defaultOption =
+                document.createElement("option");
+
+            defaultOption.value = "";
+
+            defaultOption.textContent =
+                "Select a type";
+
+            typeSelect.appendChild(
+                defaultOption
+            );
+
+
+            categoryTypes[selectedCategory].forEach(
+                function (type) {
+
+                    const option =
+                        document.createElement("option");
+
+                    option.value = type;
+
+                    option.textContent = type;
+
+                    typeSelect.appendChild(
+                        option
+                    );
+
+                }
+            );
+
         }
+    );
 
 
-        typeSelect.disabled = false;
+    // Image upload preview
+
+    const imageInput =
+        document.getElementById("image");
+
+    const imagePreviewContainer =
+        document.getElementById(
+            "image-preview-container"
+        );
+
+    const imagePreview =
+        document.getElementById("image-preview");
+
+    const imageName =
+        document.getElementById("image-name");
+
+    const changeImageButton =
+        document.getElementById(
+            "change-image-button"
+        );
 
 
-        const defaultOption = document.createElement("option");
+    imageInput.addEventListener(
+        "change",
+        function () {
 
-        defaultOption.value = "";
-
-        defaultOption.textContent = "Select a type";
-
-        typeSelect.appendChild(defaultOption);
+            const file =
+                imageInput.files[0];
 
 
-        categoryTypes[selectedCategory].forEach(function (type) {
+            if (!file) {
 
-            const option = document.createElement("option");
+                imagePreviewContainer.style.display =
+                    "none";
 
-            option.value = type;
+                imagePreview.src = "";
 
-            option.textContent = type;
+                imageName.textContent = "";
 
-            typeSelect.appendChild(option);
+                return;
 
-        });
+            }
 
-    });
+
+            imageName.textContent =
+                file.name;
+
+
+            const reader =
+                new FileReader();
+
+
+            reader.addEventListener(
+                "load",
+                function () {
+
+                    imagePreview.src =
+                        reader.result;
+
+                    imagePreviewContainer.style.display =
+                        "block";
+
+                }
+            );
+
+
+            reader.readAsDataURL(file);
+
+        }
+    );
+
+
+    changeImageButton.addEventListener(
+        "click",
+        function () {
+
+            imageInput.click();
+
+        }
+    );
 
 </script>
 
