@@ -333,9 +333,11 @@ def search():
 # Outfit Generator
 # --------------------------------------------------
 
+# --------------------------------------------------
+# Outfit Recommendations
+# --------------------------------------------------
 @app.route("/outfits")
 def outfits():
-
     occasion = request.args.get(
         "occasion",
         ""
@@ -346,12 +348,11 @@ def outfits():
         ""
     ).strip()
 
-    generated_outfits = []
+    recommendations = []
 
     if occasion and season:
-
-        generated_outfits = (
-            wardrobe_manager.generate_outfits(
+        recommendations = (
+            wardrobe_manager.recommend_outfits(
                 occasion,
                 season
             )
@@ -359,11 +360,10 @@ def outfits():
 
     return render_template(
         "outfits.html",
-        outfits=generated_outfits,
+        recommendations=recommendations,
         selected_occasion=occasion,
         selected_season=season
     )
-
 
 # --------------------------------------------------
 # Edit Clothing Item

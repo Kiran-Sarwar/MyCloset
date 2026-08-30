@@ -640,6 +640,111 @@ class TestWardrobeManager(unittest.TestCase):
             "uploads/black-tshirt.jpg"
         )
 
+    def test_recommend_outfits(self):
+        self.manager.add_clothing(
+            "White T-shirt",
+            "Tops",
+            "Casual",
+            "White",
+            "Summer",
+            "T-Shirt"
+        )
+
+        self.manager.add_clothing(
+            "Blue Jeans",
+            "Bottoms",
+            "Casual",
+            "Blue",
+            "All-Season",
+            "Jeans"
+        )
+
+        self.manager.add_clothing(
+            "White Sneakers",
+            "Shoes",
+            "Casual",
+            "White",
+            "All-Season",
+            "Sneakers"
+        )
+
+        recommendations = self.manager.recommend_outfits(
+            "Casual",
+            "Summer"
+        )
+
+        self.assertEqual(
+            len(recommendations),
+            1
+        )
+
+        outfit, score = recommendations[0]
+
+        self.assertEqual(
+            len(outfit),
+            3
+        )
+
+        self.assertGreater(
+            score,
+            0
+        )
+
+
+    def test_recommend_outfits_are_ranked(self):
+        self.manager.add_clothing(
+            "White T-shirt",
+            "Tops",
+            "Casual",
+            "White",
+            "Summer",
+            "T-Shirt"
+        )
+
+        self.manager.add_clothing(
+            "Red T-shirt",
+            "Tops",
+            "Casual",
+            "Red",
+            "Summer",
+            "T-Shirt"
+        )
+
+        self.manager.add_clothing(
+            "Blue Jeans",
+            "Bottoms",
+            "Casual",
+            "Blue",
+            "Summer",
+            "Jeans"
+        )
+
+        self.manager.add_clothing(
+            "White Sneakers",
+            "Shoes",
+            "Casual",
+            "White",
+            "Summer",
+            "Sneakers"
+        )
+
+        recommendations = self.manager.recommend_outfits(
+            "Casual",
+            "Summer"
+        )
+
+        scores = [
+            score
+            for outfit, score in recommendations
+        ]
+
+        self.assertEqual(
+            scores,
+            sorted(
+                scores,
+                reverse=True
+            )
+        )
 
 if __name__ == "__main__":
     unittest.main()
