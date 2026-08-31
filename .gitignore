@@ -6,3 +6,15 @@ __pycache__/
 
 # Uploaded clothing images
 src/static/uploads/
+
+# Python virtual environment
+.venv/
+
+# Computer Vision test images
+cv_test/*.jpg
+cv_test/*.jpeg
+cv_test/*.png
+cv_test/*.webp
+
+# Downloaded YOLO model weights
+*.pt
