@@ -3,6 +3,7 @@ from pathlib import Path
 from clothing_item import ClothingItem
 from database import Database
 from recommendation_engine import RecommendationEngine
+from clothing_detector import detect_clothing
 
 
 class WardrobeManager:
@@ -11,7 +12,6 @@ class WardrobeManager:
         self,
         db_path: str | Path | None = None
     ) -> None:
-
         self.wardrobe: list[ClothingItem] = []
 
         self.legacy_file_path = (
@@ -53,7 +53,6 @@ class WardrobeManager:
                 parts = line.strip().split(",")
 
                 if len(parts) == 8:
-
                     (
                         item_id,
                         name,
@@ -66,7 +65,6 @@ class WardrobeManager:
                     ) = parts
 
                 elif len(parts) == 7:
-
                     (
                         item_id,
                         name,
@@ -80,7 +78,6 @@ class WardrobeManager:
                     image_path = ""
 
                 elif len(parts) == 6:
-
                     (
                         name,
                         category,
@@ -94,7 +91,6 @@ class WardrobeManager:
                     image_path = ""
 
                 elif len(parts) == 5:
-
                     (
                         name,
                         category,
@@ -157,6 +153,53 @@ class WardrobeManager:
             f"{name} has been added to your wardrobe."
         )
 
+    def detect_uploaded_clothing(
+        self,
+        image_path: str
+    ) -> dict | None:
+        """
+        Detect the main clothing item in an uploaded image.
+
+        Returns the highest-confidence detection.
+        """
+
+        detections = detect_clothing(image_path)
+
+        if not detections:
+            return None
+
+        return max(
+            detections,
+            key=lambda detection: detection["confidence"]
+        )
+
+    def convert_detection_to_category(
+        self,
+        detected_category: str
+    ) -> str:
+        """
+        Convert CV categories into MyCloset's
+        existing dashboard categories.
+        """
+
+        category_mapping = {
+            "shirt": "Tops",
+            "vest": "Tops",
+
+            "pants": "Bottoms",
+            "skirt": "Bottoms",
+            "shorts": "Bottoms",
+
+            "dress": "One-Piece",
+
+            "outerwear": "Outerwear",
+        }
+
+        return category_mapping.get(
+            detected_category,
+            detected_category
+        )
+
     def view_wardrobe(self) -> None:
 
         if not self.wardrobe:
@@ -165,7 +208,6 @@ class WardrobeManager:
             )
 
         else:
-
             print(
                 "\n--- Your Wardrobe ---"
             )

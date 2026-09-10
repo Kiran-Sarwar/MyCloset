@@ -6,10 +6,11 @@ from flask import (
     render_template,
     request,
     redirect,
-    url_for
+    url_for,
+    jsonify
 )
-from werkzeug.utils import secure_filename
 
+from werkzeug.utils import secure_filename
 from wardrobe_manager import WardrobeManager
 
 
@@ -70,15 +71,21 @@ def save_uploaded_image(file) -> str:
     if not allowed_image(file.filename):
         return ""
 
-    original_filename = secure_filename(file.filename)
+    original_filename = secure_filename(
+        file.filename
+    )
 
-    extension = Path(original_filename).suffix.lower()
+    extension = Path(
+        original_filename
+    ).suffix.lower()
 
     unique_filename = (
         f"{uuid4()}{extension}"
     )
 
-    file_path = UPLOAD_FOLDER / unique_filename
+    file_path = (
+        UPLOAD_FOLDER / unique_filename
+    )
 
     file.save(file_path)
 
@@ -86,33 +93,46 @@ def save_uploaded_image(file) -> str:
 
 
 def get_dashboard_data():
+
     return {
         "total_items": len(
             wardrobe_manager.wardrobe
         ),
 
-        "tops_count": wardrobe_manager.get_category_count(
-            "Tops"
+        "tops_count": (
+            wardrobe_manager.get_category_count(
+                "Tops"
+            )
         ),
 
-        "bottoms_count": wardrobe_manager.get_category_count(
-            "Bottoms"
+        "bottoms_count": (
+            wardrobe_manager.get_category_count(
+                "Bottoms"
+            )
         ),
 
-        "one_piece_count": wardrobe_manager.get_category_count(
-            "One-Piece"
+        "one_piece_count": (
+            wardrobe_manager.get_category_count(
+                "One-Piece"
+            )
         ),
 
-        "outerwear_count": wardrobe_manager.get_category_count(
-            "Outerwear"
+        "outerwear_count": (
+            wardrobe_manager.get_category_count(
+                "Outerwear"
+            )
         ),
 
-        "shoes_count": wardrobe_manager.get_category_count(
-            "Shoes"
+        "shoes_count": (
+            wardrobe_manager.get_category_count(
+                "Shoes"
+            )
         ),
 
-        "accessories_count": wardrobe_manager.get_category_count(
-            "Accessories"
+        "accessories_count": (
+            wardrobe_manager.get_category_count(
+                "Accessories"
+            )
         )
     }
 
@@ -134,10 +154,143 @@ def home():
 
 
 # --------------------------------------------------
+# Detect Clothing Image
+# --------------------------------------------------
+
+@app.route(
+    "/detect",
+    methods=["POST"]
+)
+def detect_image():
+
+    image = request.files.get("image")
+
+    if image is None or not image.filename:
+
+        return jsonify({
+            "success": False,
+            "message": "No image was provided."
+        }), 400
+
+
+    if not allowed_image(image.filename):
+
+        return jsonify({
+            "success": False,
+            "message": "Unsupported image format."
+        }), 400
+
+
+    original_filename = secure_filename(
+        image.filename
+    )
+
+    extension = Path(
+        original_filename
+    ).suffix.lower()
+
+    temporary_filename = (
+        f"detect_{uuid4()}{extension}"
+    )
+
+    temporary_path = (
+        UPLOAD_FOLDER / temporary_filename
+    )
+
+
+    try:
+
+        image.save(temporary_path)
+
+
+        detection = (
+            wardrobe_manager
+            .detect_uploaded_clothing(
+                str(temporary_path)
+            )
+        )
+
+
+        if detection is None:
+
+            return jsonify({
+                "success": False,
+                "message": (
+                    "No clothing item was detected."
+                )
+            })
+
+
+        detected_category = (
+            detection["category"]
+        )
+
+
+        mycloset_category = (
+            wardrobe_manager
+            .convert_detection_to_category(
+                detected_category
+            )
+        )
+
+
+        # Use the user-friendly clothing name
+
+        detected_item_type = (
+            detection["display_name"]
+        )
+
+
+        return jsonify({
+
+            "success": True,
+
+            "category": mycloset_category,
+
+            "item_type": detected_item_type,
+
+            "confidence": detection["confidence"],
+
+            # Send confidence status to the frontend
+            "confidence_status": (
+                detection["confidence_status"]
+            )
+
+        })
+
+
+    except Exception as error:
+
+        print(
+            "\nComputer Vision detection failed:"
+        )
+
+        print(error)
+
+
+        return jsonify({
+            "success": False,
+            "message": (
+                "Could not analyze the image."
+            )
+        }), 500
+
+
+    finally:
+
+        if temporary_path.exists():
+
+            temporary_path.unlink()
+
+
+# --------------------------------------------------
 # Add Clothing Item
 # --------------------------------------------------
 
-@app.route("/add", methods=["GET", "POST"])
+@app.route(
+    "/add",
+    methods=["GET", "POST"]
+)
 def add_item():
 
     if request.method == "POST":
@@ -147,38 +300,143 @@ def add_item():
             ""
         ).strip()
 
+
         category = request.form.get(
             "category",
             ""
         ).strip()
+
 
         item_type = request.form.get(
             "item_type",
             ""
         ).strip()
 
+
         occasion = request.form.get(
             "occasion",
             ""
         ).strip()
+
 
         color = request.form.get(
             "color",
             ""
         ).strip()
 
+
         season = request.form.get(
             "season",
             ""
         ).strip()
 
+
         image = request.files.get(
             "image"
         )
 
+
         image_path = save_uploaded_image(
             image
         )
+
+
+        # --------------------------------------------------
+        # Computer Vision Detection
+        # --------------------------------------------------
+
+        if image_path:
+
+            uploaded_file_path = (
+                UPLOAD_FOLDER
+                / Path(image_path).name
+            )
+
+
+            try:
+
+                detection = (
+                    wardrobe_manager
+                    .detect_uploaded_clothing(
+                        str(uploaded_file_path)
+                    )
+                )
+
+
+                if detection:
+
+                    detected_category = (
+                        detection["category"]
+                    )
+
+
+                    # Use the friendly display name
+
+                    detected_item_type = (
+                        detection["display_name"]
+                    )
+
+
+                    category = (
+                        wardrobe_manager
+                        .convert_detection_to_category(
+                            detected_category
+                        )
+                    )
+
+
+                    item_type = detected_item_type
+
+
+                    print(
+                        "\nComputer Vision Detection:"
+                    )
+
+
+                    print(
+                        f"- Category: {category}"
+                    )
+
+
+                    print(
+                        f"- Type: {item_type}"
+                    )
+
+
+                    print(
+                        f"- Confidence: "
+                        f"{detection['confidence']}"
+                    )
+
+
+                    print(
+                        f"- Confidence Status: "
+                        f"{detection['confidence_status']}"
+                    )
+
+
+                else:
+
+                    print(
+                        "\nNo clothing item detected."
+                    )
+
+
+            except Exception as error:
+
+                print(
+                    "\nComputer Vision detection "
+                    "failed:"
+                )
+
+                print(error)
+
+
+                print(
+                    "Continuing with the "
+                    "user-provided category and type."
+                )
+
 
         wardrobe_manager.add_clothing(
             name,
@@ -190,11 +448,14 @@ def add_item():
             image_path
         )
 
+
         wardrobe_manager.save_wardrobe()
+
 
         return redirect(
             url_for("home")
         )
+
 
     return render_template(
         "add_item.html"
@@ -213,32 +474,39 @@ def search():
         ""
     ).strip()
 
+
     category = request.args.get(
         "category",
         ""
     ).strip()
+
 
     item_type = request.args.get(
         "item_type",
         ""
     ).strip()
 
+
     occasion = request.args.get(
         "occasion",
         ""
     ).strip()
+
 
     color = request.args.get(
         "color",
         ""
     ).strip()
 
+
     season = request.args.get(
         "season",
         ""
     ).strip()
 
+
     results = wardrobe_manager.wardrobe
+
 
     # Search by item name
 
@@ -251,6 +519,7 @@ def search():
             in item.name.lower()
         ]
 
+
     # Filter by category
 
     if category:
@@ -261,6 +530,7 @@ def search():
             if item.category.lower()
             == category.lower()
         ]
+
 
     # Filter by item type
 
@@ -273,6 +543,7 @@ def search():
             == item_type.lower()
         ]
 
+
     # Filter by occasion
 
     if occasion:
@@ -283,6 +554,7 @@ def search():
             if item.occasion.lower()
             == occasion.lower()
         ]
+
 
     # Filter by color
 
@@ -295,6 +567,7 @@ def search():
             == color.lower()
         ]
 
+
     # Filter by season
 
     if season:
@@ -306,57 +579,55 @@ def search():
             == season.lower()
         ]
 
+
     dashboard_data = get_dashboard_data()
+
 
     return render_template(
         "index.html",
-
         wardrobe=results,
-
         search_name=name,
-
         search_category=category,
-
         search_type=item_type,
-
         search_occasion=occasion,
-
         search_color=color,
-
         search_season=season,
-
         **dashboard_data
     )
 
 
 # --------------------------------------------------
-# Outfit Generator
-# --------------------------------------------------
-
-# --------------------------------------------------
 # Outfit Recommendations
 # --------------------------------------------------
+
 @app.route("/outfits")
 def outfits():
+
     occasion = request.args.get(
         "occasion",
         ""
     ).strip()
+
 
     season = request.args.get(
         "season",
         ""
     ).strip()
 
+
     recommendations = []
 
+
     if occasion and season:
+
         recommendations = (
-            wardrobe_manager.recommend_outfits(
+            wardrobe_manager
+            .recommend_outfits(
                 occasion,
                 season
             )
         )
+
 
     return render_template(
         "outfits.html",
@@ -364,6 +635,7 @@ def outfits():
         selected_occasion=occasion,
         selected_season=season
     )
+
 
 # --------------------------------------------------
 # Edit Clothing Item
@@ -377,6 +649,7 @@ def edit_item(name):
 
     item = None
 
+
     for clothing_item in wardrobe_manager.wardrobe:
 
         if clothing_item.name.lower() == name.lower():
@@ -385,11 +658,13 @@ def edit_item(name):
 
             break
 
+
     if item is None:
 
         return redirect(
             url_for("home")
         )
+
 
     if request.method == "POST":
 
@@ -398,30 +673,36 @@ def edit_item(name):
             ""
         ).strip()
 
+
         category = request.form.get(
             "category",
             ""
         ).strip()
+
 
         item_type = request.form.get(
             "item_type",
             ""
         ).strip()
 
+
         occasion = request.form.get(
             "occasion",
             ""
         ).strip()
+
 
         color = request.form.get(
             "color",
             ""
         ).strip()
 
+
         season = request.form.get(
             "season",
             ""
         ).strip()
+
 
         wardrobe_manager.edit_clothing(
             name,
@@ -433,11 +714,14 @@ def edit_item(name):
             item_type
         )
 
+
         wardrobe_manager.save_wardrobe()
+
 
         return redirect(
             url_for("home")
         )
+
 
     return render_template(
         "edit_item.html",
@@ -457,6 +741,7 @@ def remove_item(name):
 
     item = None
 
+
     for clothing_item in wardrobe_manager.wardrobe:
 
         if clothing_item.name.lower() == name.lower():
@@ -465,6 +750,7 @@ def remove_item(name):
 
             break
 
+
     if item is not None:
 
         wardrobe_manager.remove_clothing(
@@ -472,6 +758,7 @@ def remove_item(name):
         )
 
         wardrobe_manager.save_wardrobe()
+
 
     return redirect(
         url_for("home")
